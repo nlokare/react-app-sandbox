@@ -1,26 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { ApolloProvider } from '@apollo/react-hooks';
+import Dashboard from './Dashboard';
+import { withCookies } from 'react-cookie';
 
-function App() {
+export const AuthContext = React.createContext();
+
+const App = ({ client, cookies }) => {
+  const userToken = cookies.cookies['userToken'];
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ApolloProvider client={client}>
+      <AuthContext.Provider value={{ userToken }}>
+        <Dashboard />
+      </AuthContext.Provider>
+    </ApolloProvider>
   );
 }
 
-export default App;
+export default withCookies(App);
